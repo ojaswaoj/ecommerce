@@ -97,6 +97,7 @@
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            cursor: pointer;
         }
         .btn-luxe:hover {
             background: #fff;
@@ -122,6 +123,23 @@
             position: absolute;
             top: 0;
             right: 0;
+            z-index: 10;
+        }
+
+        .input-luxe {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 1rem;
+            width: 100%;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+        .input-luxe:focus {
+            border-color: var(--accent);
         }
     </style>
 </head>
@@ -151,14 +169,14 @@
                 <button onclick="toggleCart()" class="group relative flex items-center">
                     <span class="text-[10px] uppercase tracking-widest font-bold mr-3 hidden sm:inline-block">My Order</span>
                     <i class="fa-solid fa-basket-shopping text-xl text-accent"></i>
-                    <span id="cart-count" class="absolute -top-3 -right-3 bg-white text-black text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                    <span id="cart-count" class="absolute -top-3 -right-3 bg-white text-black text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold shadow-lg">0</span>
                 </button>
             </div>
         </div>
     </nav>
 
     <!-- Hero -->
-    <section class="relative min-h-screen flex items-center pt-24">
+    <section class="relative min-h-screen flex items-center pt-24 overflow-hidden">
         <div class="parallax-text top-40 left-0">FLAME & FLOUR</div>
         <div class="max-w-[1400px] mx-auto px-8 w-full grid lg:grid-cols-2 gap-20 items-center">
             <div class="order-2 lg:order-1">
@@ -182,7 +200,7 @@
         </div>
     </section>
 
-    <!-- Menu -->
+    <!-- Menu Section -->
     <section id="menu" class="py-40 bg-[#0A0A0A]">
         <div class="max-w-[1400px] mx-auto px-8">
             <div class="flex flex-col lg:flex-row justify-between items-end mb-24 border-b border-white/10 pb-12">
@@ -193,6 +211,7 @@
                 <div class="flex flex-wrap gap-6 mt-12 lg:mt-0">
                     <button onclick="filterMenu('all')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-accent transition filter-btn">Full List</button>
                     <button onclick="filterMenu('signature')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Signature</button>
+                    <button onclick="filterMenu('indian')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Desi Hearth</button>
                     <button onclick="filterMenu('budget')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Daily Staples</button>
                     <button onclick="filterMenu('combo')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Atelier Combos</button>
                 </div>
@@ -205,26 +224,54 @@
     <div id="cart-drawer" class="fixed inset-0 z-[200] invisible">
         <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleCart()"></div>
         <div class="absolute top-0 right-0 h-full w-full max-w-xl bg-black border-l border-white/10 p-8 md:p-12 flex flex-col translate-x-full transition-transform duration-500 ease-in-out" id="cart-content">
-            <div class="flex justify-between items-start mb-16">
-                <div>
-                   <h3 class="serif text-5xl mb-2">Your Order</h3>
-                   <span class="text-[9px] uppercase tracking-[0.4em] text-stone-500">Sent directly to our hearth via WhatsApp</span>
-                </div>
-                <button onclick="toggleCart()" class="text-accent uppercase tracking-widest text-[10px] border border-accent/30 px-4 py-2 hover:bg-accent hover:text-black transition">Close</button>
-            </div>
             
-            <div id="cart-items" class="flex-grow space-y-8 overflow-y-auto pr-4 custom-scrollbar"></div>
-
-            <div class="mt-12 pt-12 border-t border-white/10">
-                <div class="flex justify-between items-end mb-10">
-                    <div class="flex flex-col">
-                        <span class="text-stone-500 uppercase tracking-widest text-[10px] mb-1">Total Order Value</span>
-                        <span class="text-[9px] text-stone-600 tracking-[0.2em]">(Incl. artisanal prep)</span>
+            <!-- Standard Cart View -->
+            <div id="cart-main-view" class="h-full flex flex-col">
+                <div class="flex justify-between items-start mb-12">
+                    <div>
+                        <h3 class="serif text-5xl mb-2">Your Order</h3>
+                        <span class="text-[9px] uppercase tracking-[0.4em] text-stone-500">Sent directly to our hearth via WhatsApp</span>
                     </div>
-                    <span id="cart-total" class="serif text-5xl text-accent">₹0</span>
+                    <button onclick="toggleCart()" class="text-accent uppercase tracking-widest text-[10px] border border-accent/30 px-4 py-2 hover:bg-accent hover:text-black transition">Close</button>
                 </div>
-                <button onclick="confirmWhatsAppOrder()" class="w-full btn-luxe py-6 text-sm flex items-center justify-center gap-4">
-                    Send Order to WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+
+                <!-- Customer Info -->
+                <div class="mb-10">
+                    <label class="text-[9px] text-stone-500 uppercase tracking-[0.3em] block mb-3">Order For (Full Name)</label>
+                    <input id="customer-name" type="text" placeholder="ENTER YOUR NAME" class="input-luxe">
+                </div>
+                
+                <div id="cart-items" class="flex-grow space-y-8 overflow-y-auto pr-4 custom-scrollbar"></div>
+
+                <div class="mt-12 pt-12 border-t border-white/10">
+                    <div class="flex justify-between items-end mb-10">
+                        <div class="flex flex-col">
+                            <span class="text-stone-500 uppercase tracking-widest text-[10px] mb-1">Total Order Value</span>
+                            <span class="text-[9px] text-stone-600 tracking-[0.2em]">(Incl. artisanal prep)</span>
+                        </div>
+                        <span id="cart-total" class="serif text-5xl text-accent">₹0</span>
+                    </div>
+                    <button onclick="confirmWhatsAppOrder()" class="w-full btn-luxe py-6 text-sm flex items-center justify-center gap-4">
+                        Send Order to WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Confirmation View -->
+            <div id="cart-success-view" class="h-full hidden flex-col items-center justify-center text-center">
+                <div class="mb-10 w-24 h-24 rounded-full border border-accent flex items-center justify-center">
+                    <i class="fa-solid fa-check text-4xl text-accent"></i>
+                </div>
+                <h3 class="serif text-5xl mb-6">Awaiting the Flame</h3>
+                <p class="text-stone-400 text-sm tracking-widest uppercase mb-12 max-w-xs leading-loose">
+                    Your order details have been prepared for WhatsApp. Please complete the send action in the new tab to notify our hearth.
+                </p>
+                <div class="w-full border-y border-white/5 py-8 mb-12">
+                    <p class="text-[10px] text-stone-600 tracking-[0.3em] uppercase mb-2">Order Reference</p>
+                    <p id="success-order-total" class="serif text-3xl text-accent">Total: ₹0</p>
+                </div>
+                <button onclick="resetCartAndClose()" class="text-accent uppercase tracking-widest text-[10px] border border-accent/30 px-12 py-4 hover:bg-accent hover:text-black transition">
+                    Start New Order
                 </button>
             </div>
         </div>
@@ -245,9 +292,15 @@
                 </div>
                 <h2 class="serif text-4xl mb-6">Let's talk dough.</h2>
                 <p class="text-stone-500 font-light mb-8 italic">Crafting artisanal experiences in Prayagraj since 2022.</p>
-                <div class="flex">
-                    <input type="email" placeholder="EMAIL ADDRESS" class="bg-white/5 border border-white/10 px-6 py-4 w-full text-[10px] outline-none focus:border-accent">
-                    <button class="bg-accent text-black px-6 font-bold text-[10px]">JOIN</button>
+                
+                <div id="newsletter-container">
+                    <div id="newsletter-form" class="flex">
+                        <input id="newsletter-email" type="email" placeholder="EMAIL ADDRESS" class="bg-white/5 border border-white/10 px-6 py-4 w-full text-[10px] outline-none focus:border-accent">
+                        <button onclick="joinNewsletter()" class="bg-accent text-black px-6 font-bold text-[10px] hover:bg-white transition-colors">JOIN</button>
+                    </div>
+                    <div id="newsletter-thanks" class="hidden py-4 text-accent font-bold text-[10px] tracking-[0.3em] uppercase italic">
+                        <i class="fa-solid fa-check mr-2"></i> Welcome to the Inner Circle.
+                    </div>
                 </div>
             </div>
             
@@ -275,13 +328,13 @@
                 <div>
                     <h4 class="text-accent tracking-[0.3em] text-[10px] font-bold mb-8 uppercase">Social</h4>
                     <div class="space-y-4 text-xs tracking-widest text-stone-400">
-                        <p><a href="#" class="hover:text-white transition">INSTAGRAM</a></p>
-                        <p><a href="#" class="hover:text-white transition">GOOGLE MAPS</a></p>
+                        <p><a href="#" class="hover:text-white transition uppercase">Instagram</a></p>
+                        <p><a href="#" class="hover:text-white transition uppercase">Google Maps</a></p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="max-w-[1400px] mx-auto px-8 mt-40 pt-10 border-t border-white/5 flex justify-between text-[9px] tracking-[0.5em] text-stone-700 font-bold uppercase">
+        <div class="max-w-[1400px] mx-auto px-8 mt-40 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between text-[9px] tracking-[0.5em] text-stone-700 font-bold uppercase gap-4">
             <p>&copy; 2022 BUN & CRUST ATELIER | PRAYAGRAJ</p>
             <p>DESIGNED FOR THE BOLD</p>
         </div>
@@ -289,13 +342,17 @@
 
     <script>
         const menuData = [
-            // SIGNATURE 
+            // SIGNATURE
             { id: 1, name: 'Margherita Regale', category: 'signature', price: 380, desc: 'DOP San Marzano tomatoes, fresh buffalo mozzarella, cold-pressed olive oil.', img: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?auto=format&fit=crop&w=600&q=80' },
             { id: 2, name: 'The Obsidian', category: 'signature', price: 540, desc: 'Charcoal-infused dough, Burrata, Truffle paste, Wild Chives.', img: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=600&q=80' },
             { id: 3, name: 'Holy Basil & Garlic', category: 'signature', price: 420, desc: 'Roasted garlic cloves, fresh genovese basil, aged parmesan, chili honey.', img: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=600&q=80' },
-            { id: 4, name: 'Paneer Tikka Fire', category: 'signature', price: 450, desc: 'Clay-oven paneer, makhani sauce base, pickled onions, green chili oil.', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80' },
-            { id: 5, name: 'Butter Chicken Gold', category: 'signature', price: 580, desc: 'Pulled tandoori chicken, creamy tomato reduction, kasuri methi dust.', img: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80' },
-            { id: 6, name: 'Pesto Verdure', category: 'signature', price: 490, desc: 'House-made basil pesto, charred zucchini, olives, feta crumbles.', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80' },
+            { id: 4, name: 'Pesto Verdure', category: 'signature', price: 490, desc: 'House-made basil pesto, charred zucchini, olives, feta crumbles.', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80' },
+
+            // INDIAN / DESI HEARTH (New Section)
+            { id: 5, name: 'Paneer Tikka Fire', category: 'indian', price: 450, desc: 'Clay-oven paneer, makhani sauce base, pickled onions, green chili oil.', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80' },
+            { id: 6, name: 'Butter Chicken Gold', category: 'indian', price: 580, desc: 'Pulled tandoori chicken, creamy tomato reduction, kasuri methi dust.', img: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80' },
+            { id: 17, name: 'Prayagraj Peri-Peri', category: 'indian', price: 430, desc: 'Spiced baby corn, red paprika, peri-peri drizzle, and charred peppers.', img: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80' },
+            { id: 18, name: 'Achari Aloo Roast', category: 'indian', price: 390, desc: 'Pickled roast potatoes, kalonji seeds, ginger juliennes, and mint yogurt.', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80' },
 
             // DAILY STAPLES
             { id: 7, name: 'Classic Margherita', category: 'budget', price: 199, desc: 'Hand-stretched crust, signature tomato sauce, melted mozzarella.', img: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=600&q=80' },
@@ -321,7 +378,7 @@
             
             grid.innerHTML = items.map(item => `
                 <div class="menu-card p-10 flex flex-col group relative">
-                    ${item.category === 'combo' ? '<div class="badge-new">Save More</div>' : ''}
+                    ${(item.category === 'combo' || item.category === 'indian') ? '<div class="badge-new">New Arrival</div>' : ''}
                     <div class="relative overflow-hidden aspect-video mb-10">
                         <img src="${item.img}" 
                              onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'" 
@@ -329,7 +386,7 @@
                              alt="${item.name}">
                         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors"></div>
                         <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold text-accent border border-accent/20">
-                            ${item.category}
+                            ${item.category === 'indian' ? 'Desi Hearth' : item.category}
                         </div>
                     </div>
                     <div class="flex justify-between items-start mb-4">
@@ -359,6 +416,8 @@
             const drawer = document.getElementById('cart-drawer');
             const content = document.getElementById('cart-content');
             if (drawer.classList.contains('invisible')) {
+                document.getElementById('cart-main-view').classList.remove('hidden');
+                document.getElementById('cart-success-view').classList.add('hidden');
                 drawer.classList.remove('invisible');
                 setTimeout(() => content.classList.remove('translate-x-full'), 10);
             } else {
@@ -418,15 +477,59 @@
         function confirmWhatsAppOrder() {
             if(cart.length === 0) return;
             
-            let message = `🔥 *NEW ORDER FROM BUN %26 CRUST*%0A%0A`;
+            const nameInput = document.getElementById('customer-name');
+            const customerName = nameInput.value.trim();
+            
+            if(customerName === '') {
+                nameInput.classList.add('border-red-400');
+                nameInput.placeholder = "NAME IS REQUIRED TO PROCESS";
+                setTimeout(() => nameInput.classList.remove('border-red-400'), 2000);
+                return;
+            }
+            
+            const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            
+            let message = `🔥 *NEW ORDER FROM BUN %26 CRUST*%0A`;
+            message += `👤 *Customer:* ${customerName.toUpperCase()}%0A%0A`;
+            
             cart.forEach(item => {
                 message += `• ${item.name} x${item.qty} (₹${item.price * item.qty})%0A`;
             });
             
-            const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-            message += `%0A💰 *Total Value:* ₹${total}%0A%0A--------------------------%0A📍 Please confirm my order for Atelier pick-up/delivery.`;
+            message += `%0A💰 *Total Value:* ₹${total}%0A%0A--------------------------%0A📍 Please confirm my order for Atelier pick-up.`;
             
+            // Success State
+            document.getElementById('cart-main-view').classList.add('hidden');
+            document.getElementById('cart-success-view').classList.remove('hidden');
+            document.getElementById('success-order-total').innerText = `Total Order: ₹${total}`;
+            
+            // Open WhatsApp
             window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+        }
+
+        function resetCartAndClose() {
+            cart = [];
+            document.getElementById('customer-name').value = '';
+            updateCartUI();
+            toggleCart();
+        }
+
+        function joinNewsletter() {
+            const emailInput = document.getElementById('newsletter-email');
+            if (emailInput.value.trim() === '' || !emailInput.value.includes('@')) {
+                emailInput.classList.add('border-red-500');
+                setTimeout(() => emailInput.classList.remove('border-red-500'), 2000);
+                return;
+            }
+            
+            document.getElementById('newsletter-form').classList.add('hidden');
+            document.getElementById('newsletter-thanks').classList.remove('hidden');
+            
+            setTimeout(() => {
+                document.getElementById('newsletter-form').classList.remove('hidden');
+                document.getElementById('newsletter-thanks').classList.add('hidden');
+                emailInput.value = '';
+            }, 5000);
         }
 
         window.onload = () => renderMenu('all');
