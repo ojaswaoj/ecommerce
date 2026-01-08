@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUN & CRUST | Artisanal Hearth Prayagraj</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;700&display=swap');
+        
+        :root {
+            --accent: #E2C290;
+            --bg: #0F0F0F;
+            --card: #1A1A1A;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: #FFFFFF;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        h1, h2, h3, .serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .menu-card {
+            background: var(--card);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .menu-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+        }
+
+        .logo-seal {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #000;
+            border: 1px solid var(--accent);
+            padding: 4px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .floating-nav {
+            backdrop-filter: blur(20px);
+            background: rgba(15, 15, 15, 0.8);
+        }
+
+        .parallax-text {
+            font-size: 15vw;
+            line-height: 0.8;
+            opacity: 0.03;
+            position: absolute;
+            pointer-events: none;
+            white-space: nowrap;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f0f0f; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        .btn-luxe {
+            background: var(--accent);
+            color: #000;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-luxe:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
+
+        .hero-img-mask {
+            clip-path: polygon(10% 0, 100% 0%, 90% 100%, 0% 100%);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .badge-new {
+            background: #E2C290;
+            color: #000;
+            padding: 2px 8px;
+            font-size: 9px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-[100] floating-nav border-b border-white/5">
+        <div class="max-w-[1400px] mx-auto px-8 h-24 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <div class="logo-seal">
+                    <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=150&q=80" 
+                         class="w-full h-full rounded-full object-cover grayscale brightness-125" alt="Logo">
+                </div>
+                <div class="hidden md:block">
+                    <h2 class="text-xl font-bold tracking-[0.3em] uppercase leading-none text-white">Bun & Crust</h2>
+                    <p class="text-[9px] text-stone-500 tracking-[0.5em] uppercase mt-1">Experimental Hearth</p>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex items-center gap-12">
+                <a href="#menu" class="nav-link text-[10px] uppercase tracking-[0.2em] font-bold">The Menu</a>
+                <a href="#locations" class="nav-link text-[10px] uppercase tracking-[0.2em] font-bold">The Atelier</a>
+                <a href="#contact" class="nav-link text-[10px] uppercase tracking-[0.2em] font-bold">Contact</a>
+            </div>
+
+            <div class="flex items-center gap-8">
+                <button onclick="toggleCart()" class="group relative flex items-center">
+                    <span class="text-[10px] uppercase tracking-widest font-bold mr-3 hidden sm:inline-block">My Order</span>
+                    <i class="fa-solid fa-basket-shopping text-xl text-accent"></i>
+                    <span id="cart-count" class="absolute -top-3 -right-3 bg-white text-black text-[9px] w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-center pt-24">
+        <div class="parallax-text top-40 left-0">FLAME & FLOUR</div>
+        <div class="max-w-[1400px] mx-auto px-8 w-full grid lg:grid-cols-2 gap-20 items-center">
+            <div class="order-2 lg:order-1">
+                <span class="text-accent uppercase tracking-[0.5em] text-[10px] font-bold mb-6 block">Est. MMXXII</span>
+                <h1 class="text-7xl md:text-9xl serif leading-[0.9] mb-10">Savage <br><span class="italic font-light">Elegance.</span></h1>
+                <p class="text-stone-400 max-w-md text-lg font-light leading-relaxed mb-12">Artisanal pizzas balancing Italian tradition with the bold spirit of Prayagraj. Crafted with passion since 2022.</p>
+                <div class="flex items-center gap-8">
+                    <a href="#menu" class="btn-luxe px-12 py-5 rounded-sm">Explore Menu</a>
+                    <a href="#locations" class="text-[10px] uppercase tracking-widest border-b border-white/20 pb-2 hover:border-accent transition">Find Us</a>
+                </div>
+            </div>
+            <div class="order-1 lg:order-2 relative group">
+                <div class="hero-img-mask w-full aspect-[4/5] bg-stone-800 overflow-hidden shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1000&q=80" 
+                         class="w-full h-full object-cover scale-110 transition-all duration-700 group-hover:grayscale" alt="Pizza">
+                </div>
+                <div class="absolute -bottom-10 -right-10 bg-[#E2C290] text-black p-10 hidden xl:block shadow-2xl">
+                    <p class="serif text-4xl italic leading-none">Indo-Italian <br> Fusion.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Menu -->
+    <section id="menu" class="py-40 bg-[#0A0A0A]">
+        <div class="max-w-[1400px] mx-auto px-8">
+            <div class="flex flex-col lg:flex-row justify-between items-end mb-24 border-b border-white/10 pb-12">
+                <div class="max-w-2xl">
+                    <h2 class="text-5xl md:text-7xl serif mb-8">The Seasonal <br><span class="text-accent italic">Manifesto</span></h2>
+                    <p class="text-stone-500 uppercase tracking-widest text-xs">Expanded Selections. Refined Value.</p>
+                </div>
+                <div class="flex flex-wrap gap-6 mt-12 lg:mt-0">
+                    <button onclick="filterMenu('all')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-accent transition filter-btn">Full List</button>
+                    <button onclick="filterMenu('signature')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Signature</button>
+                    <button onclick="filterMenu('budget')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Daily Staples</button>
+                    <button onclick="filterMenu('combo')" class="text-[10px] uppercase tracking-[0.3em] font-bold text-stone-600 transition filter-btn">Atelier Combos</button>
+                </div>
+            </div>
+            <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-px bg-white/5 border border-white/5"></div>
+        </div>
+    </section>
+
+    <!-- Order Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-[200] invisible">
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="toggleCart()"></div>
+        <div class="absolute top-0 right-0 h-full w-full max-w-xl bg-black border-l border-white/10 p-8 md:p-12 flex flex-col translate-x-full transition-transform duration-500 ease-in-out" id="cart-content">
+            <div class="flex justify-between items-start mb-16">
+                <div>
+                   <h3 class="serif text-5xl mb-2">Your Order</h3>
+                   <span class="text-[9px] uppercase tracking-[0.4em] text-stone-500">Sent directly to our hearth via WhatsApp</span>
+                </div>
+                <button onclick="toggleCart()" class="text-accent uppercase tracking-widest text-[10px] border border-accent/30 px-4 py-2 hover:bg-accent hover:text-black transition">Close</button>
+            </div>
+            
+            <div id="cart-items" class="flex-grow space-y-8 overflow-y-auto pr-4 custom-scrollbar"></div>
+
+            <div class="mt-12 pt-12 border-t border-white/10">
+                <div class="flex justify-between items-end mb-10">
+                    <div class="flex flex-col">
+                        <span class="text-stone-500 uppercase tracking-widest text-[10px] mb-1">Total Order Value</span>
+                        <span class="text-[9px] text-stone-600 tracking-[0.2em]">(Incl. artisanal prep)</span>
+                    </div>
+                    <span id="cart-total" class="serif text-5xl text-accent">₹0</span>
+                </div>
+                <button onclick="confirmWhatsAppOrder()" class="w-full btn-luxe py-6 text-sm flex items-center justify-center gap-4">
+                    Send Order to WhatsApp <i class="fa-brands fa-whatsapp text-lg"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-12 right-12 z-[300] translate-y-32 transition-transform duration-500 bg-accent text-black px-10 py-5 font-bold uppercase tracking-widest text-[10px] shadow-2xl">
+        Added to Order
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact" class="py-40 border-t border-white/5 bg-[#0F0F0F] relative overflow-hidden">
+        <div class="parallax-text -bottom-10 right-0">BUN & CRUST</div>
+        <div class="max-w-[1400px] mx-auto px-8 grid lg:grid-cols-3 gap-24">
+            <div>
+                <div class="logo-seal mb-10 scale-125 origin-left">
+                    <img src="https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=150&q=80" class="w-full h-full rounded-full object-cover grayscale" alt="Logo">
+                </div>
+                <h2 class="serif text-4xl mb-6">Let's talk dough.</h2>
+                <p class="text-stone-500 font-light mb-8 italic">Crafting artisanal experiences in Prayagraj since 2022.</p>
+                <div class="flex">
+                    <input type="email" placeholder="EMAIL ADDRESS" class="bg-white/5 border border-white/10 px-6 py-4 w-full text-[10px] outline-none focus:border-accent">
+                    <button class="bg-accent text-black px-6 font-bold text-[10px]">JOIN</button>
+                </div>
+            </div>
+            
+            <div id="locations" class="lg:col-span-2 grid md:grid-cols-3 gap-16">
+                <div>
+                    <h4 class="text-accent tracking-[0.3em] text-[10px] font-bold mb-8 uppercase">Hearth Times</h4>
+                    <div class="space-y-4 text-xs tracking-widest text-stone-400 uppercase">
+                        <p>MON — THU: 11:00 - 22:00</p>
+                        <p>FRI — SAT: 11:00 - 00:00</p>
+                        <p>SUN: 09:00 - 21:00</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-accent tracking-[0.3em] text-[10px] font-bold mb-8 uppercase">The Atelier</h4>
+                    <div class="space-y-4 text-xs tracking-widest text-stone-400">
+                        <p class="text-white font-bold uppercase">Transport Nagar</p>
+                        <p class="uppercase">Prayagraj, Uttar Pradesh</p>
+                        <div class="pt-4 space-y-3 flex flex-col">
+                            <a href="https://wa.me/917317734194" target="_blank" class="hover:text-white transition flex items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-accent"></i> +91 7317734194
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-accent tracking-[0.3em] text-[10px] font-bold mb-8 uppercase">Social</h4>
+                    <div class="space-y-4 text-xs tracking-widest text-stone-400">
+                        <p><a href="#" class="hover:text-white transition">INSTAGRAM</a></p>
+                        <p><a href="#" class="hover:text-white transition">GOOGLE MAPS</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-[1400px] mx-auto px-8 mt-40 pt-10 border-t border-white/5 flex justify-between text-[9px] tracking-[0.5em] text-stone-700 font-bold uppercase">
+            <p>&copy; 2022 BUN & CRUST ATELIER | PRAYAGRAJ</p>
+            <p>DESIGNED FOR THE BOLD</p>
+        </div>
+    </footer>
+
+    <script>
+        const menuData = [
+            // SIGNATURE 
+            { id: 1, name: 'Margherita Regale', category: 'signature', price: 380, desc: 'DOP San Marzano tomatoes, fresh buffalo mozzarella, cold-pressed olive oil.', img: 'https://images.unsplash.com/photo-1574071318508-1cdbad80ad38?auto=format&fit=crop&w=600&q=80' },
+            { id: 2, name: 'The Obsidian', category: 'signature', price: 540, desc: 'Charcoal-infused dough, Burrata, Truffle paste, Wild Chives.', img: 'https://images.unsplash.com/photo-1594007654729-407eedc4be65?auto=format&fit=crop&w=600&q=80' },
+            { id: 3, name: 'Holy Basil & Garlic', category: 'signature', price: 420, desc: 'Roasted garlic cloves, fresh genovese basil, aged parmesan, chili honey.', img: 'https://images.unsplash.com/photo-1571407970349-bc81e7e96d47?auto=format&fit=crop&w=600&q=80' },
+            { id: 4, name: 'Paneer Tikka Fire', category: 'signature', price: 450, desc: 'Clay-oven paneer, makhani sauce base, pickled onions, green chili oil.', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80' },
+            { id: 5, name: 'Butter Chicken Gold', category: 'signature', price: 580, desc: 'Pulled tandoori chicken, creamy tomato reduction, kasuri methi dust.', img: 'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&w=600&q=80' },
+            { id: 6, name: 'Pesto Verdure', category: 'signature', price: 490, desc: 'House-made basil pesto, charred zucchini, olives, feta crumbles.', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80' },
+
+            // DAILY STAPLES
+            { id: 7, name: 'Classic Margherita', category: 'budget', price: 199, desc: 'Hand-stretched crust, signature tomato sauce, melted mozzarella.', img: 'https://images.unsplash.com/photo-1604068549290-dea0e4a305ca?auto=format&fit=crop&w=600&q=80' },
+            { id: 8, name: 'Garden Fresh', category: 'budget', price: 249, desc: 'Golden corn, bell peppers, farm onions, and house herb blend.', img: 'https://images.unsplash.com/photo-1548365328-8c6db3220e4c?auto=format&fit=crop&w=600&q=80' },
+            { id: 9, name: 'Double Cheese Burst', category: 'budget', price: 289, desc: 'Extra layer of creamy liquid cheese topped with mozzarella.', img: 'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&w=600&q=80' },
+            { id: 13, name: 'Spicy Tangy Paneer', category: 'budget', price: 279, desc: 'Diced paneer, capsicum, and zesty peri-peri drizzle.', img: 'https://images.unsplash.com/photo-1534308983496-4fabb1a015ee?auto=format&fit=crop&w=600&q=80' },
+            { id: 14, name: 'Classic Pepperoni', category: 'budget', price: 349, desc: 'Aged pork pepperoni, mozzarella, and a dash of oregano.', img: 'https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80' },
+
+            // ATELIER COMBOS
+            { id: 10, name: 'The Soloist', category: 'combo', price: 349, desc: '1 Daily Pizza + Garlic Loaf (2pcs) + 1 Beverage.', img: 'https://images.unsplash.com/photo-1555072956-7758afb20e8f?auto=format&fit=crop&w=600&q=80' },
+            { id: 11, name: 'The Duel', category: 'combo', price: 699, desc: '2 Daily Pizzas + Cheesy Fingers + 2 Beverages.', img: 'https://images.unsplash.com/photo-1528137871618-79d2761e3fd5?auto=format&fit=crop&w=600&q=80' },
+            { id: 12, name: 'Atelier Feast', category: 'combo', price: 1099, desc: '3 Signature Pizzas + Full Sides Platter + 4 Beverages.', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=80' },
+            { id: 15, name: 'Student Box', category: 'combo', price: 249, desc: 'Personal Pizza + Small Fries + Cold Coffee.', img: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80' },
+            { id: 16, name: 'Family Hearth', category: 'combo', price: 1499, desc: '4 Medium Pizzas + 2 Garlic Breads + Brownie Box.', img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=600&q=80' }
+        ];
+
+        let cart = [];
+        const WHATSAPP_NUMBER = "917317734194";
+
+        function renderMenu(category = 'all') {
+            const grid = document.getElementById('menu-grid');
+            const items = category === 'all' ? menuData : menuData.filter(i => i.category === category);
+            
+            grid.innerHTML = items.map(item => `
+                <div class="menu-card p-10 flex flex-col group relative">
+                    ${item.category === 'combo' ? '<div class="badge-new">Save More</div>' : ''}
+                    <div class="relative overflow-hidden aspect-video mb-10">
+                        <img src="${item.img}" 
+                             onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'" 
+                             class="w-full h-full object-cover transition-all duration-700 group-hover:grayscale group-hover:scale-110" 
+                             alt="${item.name}">
+                        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors"></div>
+                        <div class="absolute top-4 left-4 bg-black/60 px-3 py-1 text-[8px] tracking-[0.2em] uppercase font-bold text-accent border border-accent/20">
+                            ${item.category}
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="serif text-2xl italic">${item.name}</h3>
+                        <span class="text-accent font-bold tracking-widest text-lg">₹${item.price}</span>
+                    </div>
+                    <p class="text-stone-500 text-[10px] tracking-widest leading-loose mb-10 uppercase">${item.desc}</p>
+                    <button onclick="addToCart(${item.id})" class="mt-auto border border-white/10 py-4 text-[9px] font-bold tracking-[0.3em] uppercase hover:bg-accent hover:text-black transition-all">
+                        Add to Order
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function filterMenu(cat) {
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(b => {
+                b.classList.remove('text-accent');
+                b.classList.add('text-stone-600');
+            });
+            event.target.classList.remove('text-stone-600');
+            event.target.classList.add('text-accent');
+            renderMenu(cat);
+        }
+
+        function toggleCart() {
+            const drawer = document.getElementById('cart-drawer');
+            const content = document.getElementById('cart-content');
+            if (drawer.classList.contains('invisible')) {
+                drawer.classList.remove('invisible');
+                setTimeout(() => content.classList.remove('translate-x-full'), 10);
+            } else {
+                content.classList.add('translate-x-full');
+                setTimeout(() => drawer.classList.add('invisible'), 500);
+            }
+        }
+
+        function addToCart(id) {
+            const item = menuData.find(i => i.id === id);
+            const exists = cart.find(i => i.id === id);
+            if (exists) exists.qty++;
+            else cart.push({ ...item, qty: 1 });
+            
+            updateCartUI();
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-32');
+            setTimeout(() => toast.classList.add('translate-y-32'), 2500);
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            const count = document.getElementById('cart-count');
+            const total = document.getElementById('cart-total');
+            const sum = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            
+            count.innerText = cart.reduce((acc, i) => acc + i.qty, 0);
+            total.innerText = `₹${sum}`;
+            
+            if(cart.length === 0) {
+                container.innerHTML = `<p class="text-stone-600 uppercase tracking-widest text-[10px] text-center mt-20">Your tray is empty.</p>`;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="flex gap-6 items-center border-b border-white/5 pb-8">
+                    <img src="${item.img}" 
+                         onerror="this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=200&q=80'" 
+                         class="w-16 h-16 object-cover grayscale">
+                    <div class="flex-grow">
+                        <h4 class="serif text-xl italic">${item.name}</h4>
+                        <div class="flex items-center gap-4 mt-1">
+                            <p class="text-[9px] text-stone-500 uppercase tracking-widest">Qty: ${item.qty}</p>
+                            <button onclick="removeFromCart(${item.id})" class="text-[8px] text-red-500/50 hover:text-red-500 uppercase tracking-widest transition">Remove</button>
+                        </div>
+                    </div>
+                    <span class="text-accent font-bold text-sm">₹${item.price * item.qty}</span>
+                </div>
+            `).join('');
+        }
+
+        function confirmWhatsAppOrder() {
+            if(cart.length === 0) return;
+            
+            let message = `🔥 *NEW ORDER FROM BUN %26 CRUST*%0A%0A`;
+            cart.forEach(item => {
+                message += `• ${item.name} x${item.qty} (₹${item.price * item.qty})%0A`;
+            });
+            
+            const total = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+            message += `%0A💰 *Total Value:* ₹${total}%0A%0A--------------------------%0A📍 Please confirm my order for Atelier pick-up/delivery.`;
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${message}`, '_blank');
+        }
+
+        window.onload = () => renderMenu('all');
+    </script>
+</body>
+</html>
